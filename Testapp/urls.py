@@ -1,6 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from .views import CategoryView, ModuleView, ModuleAttachmentView, UserDetailAPI, \
-    RegisterUserAPIView, CourseView, ModuleContentView, ModuleCommentView, MyTokenObtainPairView, ModuleTagView
+    RegisterUserAPIView, CourseView, ModuleContentView, ModuleCommentView, MyTokenObtainPairView, ModuleTagView, \
+    CourseModuleAssigneeView
 from django.urls import path, include
 from rest_framework_simplejwt.views import (
     TokenRefreshView, TokenVerifyView,
@@ -14,6 +15,7 @@ router.register('attachment', ModuleAttachmentView)
 router.register('content', ModuleContentView)
 router.register('comment', ModuleCommentView)
 router.register('tag', ModuleTagView)
+router.register('assignee', CourseModuleAssigneeView)
 
 urlpatterns = [
     path('api/', include(router.urls)),

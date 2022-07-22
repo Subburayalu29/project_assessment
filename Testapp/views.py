@@ -7,10 +7,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import Category, CourseModule, Course, CourseModuleAttachment, \
-    CourseModuleContent, CourseModuleComment, CourseModuleTag
+    CourseModuleContent, CourseModuleComment, CourseModuleTag, CourseModuleAssignee
 from .serializers import Categoryserializer, RegisterSerializer, UserSerializer, \
     CourseModuleSerializer, CourseModuleAttachmentSerializer, Courseserializer, \
-    CourseModuleContentSerializer, CourseModuleCommentSerializer, MyTokenObtainPairSerializer, CourseModuleTagSerializer
+    CourseModuleContentSerializer, CourseModuleCommentSerializer, MyTokenObtainPairSerializer, \
+    CourseModuleTagSerializer, CourseModuleAssigneeSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
@@ -83,6 +84,16 @@ class ModuleTagView(ModelViewSet):
     queryset = CourseModuleTag.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = CourseModuleTagSerializer
+
+    def get_serializer_context(self):
+        return {'user_id': self.request.user.id}
+
+
+
+class CourseModuleAssigneeView(ModelViewSet):
+    queryset = CourseModuleAssignee.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CourseModuleAssigneeSerializer
 
     def get_serializer_context(self):
         return {'user_id': self.request.user.id}

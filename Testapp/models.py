@@ -112,8 +112,8 @@ class CourseModuleContent(models.Model):
 
 class CourseModuleAssignee(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    assignee = models.ForeignKey(User, blank=False, null=True, related_name='course_module_assignee',
-                                 on_delete=models.CASCADE)
+    assignee = models.OneToOneField(User, blank=False, null=True, related_name='course_module_assignee',
+                                    on_delete=models.CASCADE)
     module_id = models.ForeignKey(CourseModule, on_delete=models.CASCADE, null=True, blank=False,
                                   related_name='module_assignee')
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=False,
@@ -134,10 +134,4 @@ class CourseModuleTag(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, blank=False, null=True, related_name='course_tag_user_id',
                                    on_delete=models.CASCADE)
-    tag = models.ManyToManyField('self')
-    tag_limit = 64
-
-    def tag_changed(sender, **kwargs):
-        instance = kwargs['instance']
-        if len(instance.tag.all()) >= instance.tag_limit:
-            raise ValidationError(f'Max number of records is {instance.tag_limit}')
+    tag = models.CharField(null=True, blank=False, max_length=256)

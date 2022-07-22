@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from rest_framework import serializers
+from rest_framework import serializers, request
+from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueValidator
 from .models import Category, Course, CourseModule, CourseModuleAttachment, \
-    CourseModuleContent, CourseModuleComment, CourseModuleTag
+    CourseModuleContent, CourseModuleComment, CourseModuleTag, CourseModuleAssignee
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
@@ -185,3 +186,40 @@ class CourseModuleTagSerializer(serializers.ModelSerializer):
         validated_data['created_by'] = auth_user_id
         user = CourseModuleTag.objects.create(**validated_data)
         return user
+
+    def validate(self, attrs):
+        module_id = attrs['module_id']
+        module_tags = CourseModuleTag.objects.filter(module_id=module_id)
+        if module_tags.count() >= 3:
+            raise serializers.ValidationError('Tag limit is over in module')
+        return attrs
+
+
+class CourseModuleAssigneeSerializer(serializers.ModelSerializer):
+    module_assignee = CourseModuleSerializer(read_only=True, many=True)
+    course_assignee = Courseserializer(read_only=True, many=True)
+    course_module_assignee = UserSerializer(read_only=True, many=True)
+    username = serializers.CharField(source="created_by", read_only=True)
+
+    class Meta:
+        model = CourseModuleAssignee
+        fields = ['id', 'assignee', 'course_module_assignee', 'module_id', 'module_assignee', 'course_assignee',
+                  'course_id', 'created_by',
+                  'username', 'created_at', 'updated_at']
+        read_only_fields = ['created_by', 'username']
+
+    def create(self, validated_data):
+        user_id = self.context.get('user_id')
+        auth_user_id = User.objects.get(id=user_id)
+        validated_data['created_by'] = auth_user_id
+        user = CourseModuleAssignee.objects.create(**validated_data)
+        return user
+
+
+    def validate(self, attrs):
+        assignee = attrs['assignee']
+        user_id = self.context.get('user_id')
+        assignee_user = CourseModuleAssignee.objects.filter(assignee=assignee)
+        if assignee_user == User.objects.filter(id=user_id):
+            raise serializers.ValidationError('You should not assignee same person')
+        return attrs

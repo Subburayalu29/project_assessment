@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'Testapp',
     'rest_framework_simplejwt',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -179,3 +180,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = ['Testapp.models.EmailBackend']
+
+TAGGIT_CASE_INSENSITIVE = True
+
+
