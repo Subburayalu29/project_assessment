@@ -216,6 +216,7 @@ class CourseModuleAssigneeSerializer(serializers.ModelSerializer):
         return user
 
 
+
     def validate(self, attrs):
         assignee = attrs['assignee']
         user_id = self.context.get('user_id')
