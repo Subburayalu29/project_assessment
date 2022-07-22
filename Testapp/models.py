@@ -135,4 +135,3 @@ class CourseModuleTag(models.Model):
     created_by = models.ForeignKey(User, blank=False, null=True, related_name='course_tag_user_id',
                                    on_delete=models.CASCADE)
     tag = models.CharField(null=True, blank=False, max_length=256)
-
