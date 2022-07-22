@@ -89,6 +89,7 @@ class ModuleTagView(ModelViewSet):
         return {'user_id': self.request.user.id}
 
 
+
 class CourseModuleAssigneeView(ModelViewSet):
     queryset = CourseModuleAssignee.objects.all()
     permission_classes = (IsAuthenticated,)
