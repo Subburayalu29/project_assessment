@@ -8,6 +8,8 @@ from Testapp.validators import validate_file_size
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
+"""create a class for emailbackend this is use to login with mail id and password"""
+
 
 class EmailBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
@@ -20,6 +22,9 @@ class EmailBackend(ModelBackend):
             if user.check_password(password):
                 return user
         return None
+
+
+"""after created emailbackend here after create a models for what we want to make in this project"""
 
 
 class Category(models.Model):
@@ -135,4 +140,3 @@ class CourseModuleTag(models.Model):
     created_by = models.ForeignKey(User, blank=False, null=True, related_name='course_tag_user_id',
                                    on_delete=models.CASCADE)
     tag = models.CharField(null=True, blank=False, max_length=256)
-

@@ -8,6 +8,8 @@ from .models import Category, Course, CourseModule, CourseModuleAttachment, \
     CourseModuleContent, CourseModuleComment, CourseModuleTag, CourseModuleAssignee
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+"""here i create a serializer for login athuentication and create a user serializer and register serializer"""
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -150,6 +152,7 @@ class CourseModuleContentSerializer(serializers.ModelSerializer):
         return user
 
 
+# Serializer to CourseModuleCommentSerializer
 class CourseModuleCommentSerializer(serializers.ModelSerializer):
     module_comment = CourseModuleSerializer(read_only=True, many=True)
     course_comment = Courseserializer(read_only=True, many=True)
@@ -161,6 +164,7 @@ class CourseModuleCommentSerializer(serializers.ModelSerializer):
                   'username', 'created_at', 'updated_at']
         read_only_fields = ['created_by', 'username']
 
+    # this is for create and get a user id in serializers
     def create(self, validated_data):
         user_id = self.context.get('user_id')
         auth_user_id = User.objects.get(id=user_id)
@@ -169,6 +173,7 @@ class CourseModuleCommentSerializer(serializers.ModelSerializer):
         return user
 
 
+# Serializer to CourseModuleTagSerializer
 class CourseModuleTagSerializer(serializers.ModelSerializer):
     module_tag = CourseModuleSerializer(read_only=True, many=True)
     course_tag = Courseserializer(read_only=True, many=True)
@@ -180,6 +185,7 @@ class CourseModuleTagSerializer(serializers.ModelSerializer):
                   'username', 'created_at', 'updated_at']
         read_only_fields = ['created_by', 'username']
 
+    # this is for create and get a user id in serializers
     def create(self, validated_data):
         user_id = self.context.get('user_id')
         auth_user_id = User.objects.get(id=user_id)
@@ -187,6 +193,7 @@ class CourseModuleTagSerializer(serializers.ModelSerializer):
         user = CourseModuleTag.objects.create(**validated_data)
         return user
 
+    # this is validate for limited tags only post in serializers
     def validate(self, attrs):
         module_id = attrs['module_id']
         module_tags = CourseModuleTag.objects.filter(module_id=module_id)
@@ -195,6 +202,7 @@ class CourseModuleTagSerializer(serializers.ModelSerializer):
         return attrs
 
 
+# Serializer to CourseModuleAssigneeSerializer
 class CourseModuleAssigneeSerializer(serializers.ModelSerializer):
     module_assignee = CourseModuleSerializer(read_only=True, many=True)
     course_assignee = Courseserializer(read_only=True, many=True)
@@ -208,6 +216,7 @@ class CourseModuleAssigneeSerializer(serializers.ModelSerializer):
                   'username', 'created_at', 'updated_at']
         read_only_fields = ['created_by', 'username']
 
+    # this is for create and get a user id in serializers
     def create(self, validated_data):
         user_id = self.context.get('user_id')
         auth_user_id = User.objects.get(id=user_id)
@@ -215,8 +224,7 @@ class CourseModuleAssigneeSerializer(serializers.ModelSerializer):
         user = CourseModuleAssignee.objects.create(**validated_data)
         return user
 
-
-
+    # this is validate for assignee roles in serializers
     def validate(self, attrs):
         assignee = attrs['assignee']
         user_id = self.context.get('user_id')

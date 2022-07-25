@@ -14,9 +14,14 @@ from .serializers import Categoryserializer, RegisterSerializer, UserSerializer,
     CourseModuleTagSerializer, CourseModuleAssigneeSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+"""create class for token obtainpairview from serializers"""
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+"""create a class for views for connect with serializers"""
 
 
 class UserDetailAPI(APIView):
@@ -87,7 +92,6 @@ class ModuleTagView(ModelViewSet):
 
     def get_serializer_context(self):
         return {'user_id': self.request.user.id}
-
 
 
 class CourseModuleAssigneeView(ModelViewSet):
